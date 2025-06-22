@@ -1,0 +1,6 @@
+# Dev + Test tools
+-r requirements.txt
+
+pytest
+black
+ruff
