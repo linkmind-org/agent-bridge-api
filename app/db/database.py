@@ -1,18 +1,11 @@
-from typing import List, Dict
-from app.models.agent import Message
+from sqlalchemy import create_engine, MetaData
+from sqlalchemy.orm import sessionmaker
 
-# In-memory storage for now
-class InMemoryDB:
-    def __init__(self):
-        self.messages: List[Message] = []
+DATABASE_URL = "sqlite:///./agentbridge.db"
 
-    def save_message(self, message: Message):
-        self.messages.append(message)
+engine = create_engine(
+    DATABASE_URL, connect_args={"check_same_thread": False}
+)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-    def get_conversation(self, agent_a: str, agent_b: str) -> List[Message]:
-        return [m for m in self.messages if 
-                (m.sender_id == agent_a and m.receiver_id == agent_b) or
-                (m.sender_id == agent_b and m.receiver_id == agent_a)]
-
-# Singleton instance
-db = InMemoryDB()
+metadata = MetaData()
